@@ -24,9 +24,9 @@ class HomeController extends AbstractController
     /**
      * @Route("/guests", name="guests")
      */
-    public function guests()
+    public function guests(UserRepository $userRepository)
     {
-        $guests = $this->getDoctrine()->getRepository(User::class)->findBy(['admin' => false]);
+        $guests = $userRepository->findBy(["admin" => false]);
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);
@@ -35,9 +35,9 @@ class HomeController extends AbstractController
     /**
      * @Route("/guest/{id}", name="guest")
      */
-    public function guest(int $id)
+    public function guest(int $id, UserRepository $userRepository)
     {
-        $guest = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $guest = $userRepository->findOneBy(["id" => $id]);
         return $this->render('front/guest.html.twig', [
             'guest' => $guest
         ]);
