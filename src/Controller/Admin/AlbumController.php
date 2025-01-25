@@ -12,9 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AlbumController extends AbstractController
 {
-    /**
-     * @Route("/admin/album", name="admin_album_index")
-     */
     #[Route ("/admin/album", name: "admin_album_index", methods: ["GET"])]
     public function index()
     {
