@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Album;
 use App\Entity\Media;
 use App\Entity\User;
+use App\Repository\AlbumRepository;
+use App\Repository\MediaRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -43,15 +46,15 @@ class HomeController extends AbstractController
     /**
      * @Route("/portfolio/{id}", name="portfolio")
      */
-    public function portfolio(?int $id = null)
+    public function portfolio(AlbumRepository $albumRepository, UserRepository $userRepository, MediaRepository $mediaRepository,?int $id = null,)
     {
-        $albums = $this->getDoctrine()->getRepository(Album::class)->findAll();
-        $album = $id ? $this->getDoctrine()->getRepository(Album::class)->find($id) : null;
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneByAdmin(true);
+        $albums = $albumRepository->findAll();
+        $album = $id ? $albumRepository->find($id) : null;
+        $user = $userRepository->findBy(["admin" =>true]);
 
         $medias = $album
-            ? $this->getDoctrine()->getRepository(Media::class)->findByAlbum($album)
-            : $this->getDoctrine()->getRepository(Media::class)->findByUser($user);
+            ? $mediaRepository->findBy(["album"=>$album])
+            : $mediaRepository->findBy(["user"=>$user]);
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,
             'album' => $album,
