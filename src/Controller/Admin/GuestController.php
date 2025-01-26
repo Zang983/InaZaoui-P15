@@ -8,6 +8,7 @@ use App\Repository\MediaRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -65,14 +66,29 @@ final class GuestController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('app_admin_guest');
     }
+
     #[Route('admin/guests/add', name: 'admin_add_guest')]
     public function addGuest(
         UserRepository         $userRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        Request                $request
     ): Response
     {
         $form = $this->createForm(GuestType::class);
-
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $user = new User();
+            $user->setName($form->get('name')->getData());
+            $user->setDescription($form->get('description')->getData());
+            $user->setEmail($form->get('email')->getData());
+            $user->setAdmin($form->get('admin')->getData());
+            $user->setRoles(['ROLE_USER']);
+            $user->setPassword(password_hash('password', PASSWORD_DEFAULT));
+            $user->setIsBlocked(false);
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_admin_guest');
+        }
         return $this->render('admin/guests/add.html.twig', [
             'form' => $form->createView(),
 
