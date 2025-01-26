@@ -23,7 +23,7 @@ class HomeController extends AbstractController
     #[Route ("/guests", name: "public_guests")]
     public function guests(UserRepository $userRepository)
     {
-        $guests = $userRepository->findBy(["admin" => false]);
+        $guests = $userRepository->findAllGuestsWithMedia();
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);
@@ -32,7 +32,7 @@ class HomeController extends AbstractController
     #[Route ("/guests/{id}", name: "guest")]
     public function guest(int $id, UserRepository $userRepository)
     {
-        $guest = $userRepository->findOneBy(["id" => $id]);
+        $guest = $userRepository->findOneGuestWithMedia($id);
         return $this->render('front/guest.html.twig', [
             'guest' => $guest,
         ]);
