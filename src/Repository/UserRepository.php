@@ -56,12 +56,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findAllGuestsWithMedia(): array
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.admin = false')
+        $users = $this->createQueryBuilder('u')
             ->leftJoin('u.medias', 'm')
             ->addSelect('m')
             ->getQuery()
             ->getResult();
+
+        $filteredUsers = array_filter($users, function ($user) {
+            return !in_array("ROLE_ADMIN", $user->getRoles());
+        });
+
+        return $filteredUsers ? $filteredUsers : [];
     }
     public function findOneGuestWithMedia(int $id): ?User
     {
