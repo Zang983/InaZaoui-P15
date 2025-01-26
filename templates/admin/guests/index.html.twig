@@ -22,18 +22,23 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.description }}</td>
                     <td>{{ user.email }}</td>
-                    {% if user.isBlocked %}
+                    {% if 'ROLE_BLOCKED' in user.roles %}
                         <td>
-                            <a href="{{ path('admin_block_guest', {id: user.id}) }}"
-                               class="btn btn-primary">Débloquer</a>
+                            <a href="{{ path('admin_block_guest', {id: user.id}) }}" class="btn btn-primary">
+                                Débloquer
+                            </a>
                         </td>
                     {% else %}
                         <td>
-                            <a href="{{ path('admin_block_guest', {id: user.id}) }}" class="btn btn-danger">Bloquer</a>
+                            <a href="{{ path('admin_block_guest', {id: user.id}) }}" class="btn btn-danger">
+                                Bloquer
+                            </a>
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{{ path('admin_delete_guest', {id: user.id}) }}" class="btn btn-danger">Supprimer</a>
+                        <a href="{{ path('admin_delete_guest', {id: user.id}) }}" class="btn btn-danger">
+                            Supprimer
+                        </a>
                     </td>
 
                 </tr>
