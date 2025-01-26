@@ -1,0 +1,42 @@
+{% extends 'admin.html.twig' %}
+
+{% block admin %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Email</th>
+            <th>Bloquer</th>
+            <th>Supprimer</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            {% if user.email is not same as('ina@zaoui.com') %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.description }}</td>
+                    <td>{{ user.email }}</td>
+                    {% if user.isBlocked %}
+                        <td>
+                            <a href="{{ path('admin_block_guest', {id: user.id}) }}"
+                               class="btn btn-primary">Débloquer</a>
+                        </td>
+                    {% else %}
+                        <td>
+                            <a href="{{ path('admin_block_guest', {id: user.id}) }}" class="btn btn-danger">Bloquer</a>
+                        </td>
+                    {% endif %}
+                    <td>
+                        <a href="{{ path('admin_delete_guest', {id: user.id}) }}" class="btn btn-danger">Supprimer</a>
+                    </td>
+
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+

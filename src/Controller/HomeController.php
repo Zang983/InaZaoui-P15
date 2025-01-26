@@ -29,12 +29,12 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route ("/guest/{id}", name: "guest")]
+    #[Route ("/guests/{id}", name: "guests")]
     public function guest(int $id, UserRepository $userRepository)
     {
         $guest = $userRepository->findOneBy(["id" => $id]);
-        return $this->render('front/guest.html.twig', [
-            'guest' => $guest
+        return $this->render('front/guests.html.twig', [
+            'guests' => $guest
         ]);
     }
 
