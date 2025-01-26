@@ -63,7 +63,11 @@ final class GuestController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_admin_guest');
         }
-        $user->setIsBlocked(!$user->isBlocked());
+        if(in_array('ROLE_BLOCKED', $user->getRoles())) {
+            $user->setRoles(['ROLE_USER']);
+        } else {
+            $user->setRoles(['ROLE_BLOCKED']);
+        }
         $entityManager->persist($user);
         $entityManager->flush();
         return $this->redirectToRoute('app_admin_guest');

@@ -39,10 +39,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $password;
 
-    #[ORM\Column]
-    private ?bool $is_blocked = null;
-
-
     public function __construct()
     {
         $this->medias = new ArrayCollection();
@@ -114,7 +110,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
+        if(!in_array('ROLE_BLOCKED', $roles)) {
+            $roles[] = 'ROLE_USER';
+        }
         return array_unique($roles);
     }
 
@@ -142,17 +140,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function isBlocked(): ?bool
-    {
-        return $this->is_blocked;
-    }
-
-    public function setIsBlocked(bool $is_blocked): static
-    {
-        $this->is_blocked = $is_blocked;
-
-        return $this;
     }
 }
