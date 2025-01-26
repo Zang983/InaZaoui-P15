@@ -20,7 +20,7 @@ class HomeController extends AbstractController
         return $this->render('front/home.html.twig');
     }
 
-    #[Route ("/guests", name: "guests")]
+    #[Route ("/guests", name: "public_guests")]
     public function guests(UserRepository $userRepository)
     {
         $guests = $userRepository->findBy(["admin" => false]);
@@ -29,12 +29,12 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route ("/guests/{id}", name: "guests")]
+    #[Route ("/guests/{id}", name: "guest")]
     public function guest(int $id, UserRepository $userRepository)
     {
         $guest = $userRepository->findOneBy(["id" => $id]);
-        return $this->render('front/guests.html.twig', [
-            'guests' => $guest
+        return $this->render('front/guest.html.twig', [
+            'guest' => $guest,
         ]);
     }
 

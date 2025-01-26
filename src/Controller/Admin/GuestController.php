@@ -69,14 +69,13 @@ final class GuestController extends AbstractController
 
     #[Route('admin/guests/add', name: 'admin_add_guest')]
     public function addGuest(
-        UserRepository         $userRepository,
         EntityManagerInterface $entityManager,
         Request                $request
     ): Response
     {
         $form = $this->createForm(GuestType::class);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $user = new User();
             $user->setName($form->get('name')->getData());
             $user->setDescription($form->get('description')->getData());
@@ -91,7 +90,6 @@ final class GuestController extends AbstractController
         }
         return $this->render('admin/guests/add.html.twig', [
             'form' => $form->createView(),
-
         ]);
     }
 }
