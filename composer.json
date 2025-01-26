@@ -86,6 +86,9 @@
         ],
         "unit": [
             "symfony php bin/phpunit"
+        ],
+        "coverage": [
+            "vendor/bin/phpunit --coverage-html public/test-coverage"
         ]
     },
     "conflict": {

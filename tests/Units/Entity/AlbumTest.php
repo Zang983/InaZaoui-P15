@@ -15,5 +15,7 @@ class AlbumTest extends TestCase
         $album->setName('Album name');
         $this->assertEquals('Album name', $album->getName());
 
+        $this->assertNull($album->getId());
+
     }
 }
