@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use App\Form\GuestType;
 use App\Repository\MediaRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,5 +64,18 @@ final class GuestController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
         return $this->redirectToRoute('app_admin_guest');
+    }
+    #[Route('admin/guests/add', name: 'admin_add_guest')]
+    public function addGuest(
+        UserRepository         $userRepository,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        $form = $this->createForm(GuestType::class);
+
+        return $this->render('admin/guests/add.html.twig', [
+            'form' => $form->createView(),
+
+        ]);
     }
 }
