@@ -3,9 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Album;
-use App\Entity\Media;
 use App\Form\AlbumType;
-use App\Form\MediaType;
+use App\Repository\AlbumRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,10 +12,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class AlbumController extends AbstractController
 {
     #[Route ("/admin/album", name: "admin_album_index", methods: ["GET"])]
-    public function index()
+    public function index(AlbumRepository $albumRepository)
     {
-        $albums = $this->getDoctrine()->getRepository(Album::class)->findAll();
-
+        $albums = $albumRepository->findAll();
         return $this->render('admin/album/index.html.twig', ['albums' => $albums]);
     }
 
@@ -53,7 +51,7 @@ class AlbumController extends AbstractController
         return $this->render('admin/album/update.html.twig', ['form' => $form->createView()]);
     }
 
-    #[Route ("/admin/album/delete/{id}", name: "admin_album_delete", methods: ["DELETE"])]
+    #[Route ("/admin/album/delete/{id}", name: "admin_album_delete", methods: ["GET"])]
     public function delete(int $id)
     {
         $media = $this->getDoctrine()->getRepository(Album::class)->find($id);
