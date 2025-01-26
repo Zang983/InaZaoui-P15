@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Album;
 use App\Form\AlbumType;
 use App\Repository\AlbumRepository;
+use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,9 +53,17 @@ class AlbumController extends AbstractController
     }
 
     #[Route ("/admin/album/delete/{id}", name: "admin_album_delete", methods: ["GET"])]
-    public function delete(int $id, EntityManagerInterface $entityManager, AlbumRepository $albumRepository): Response
+    public function delete(int $id, EntityManagerInterface $entityManager, AlbumRepository $albumRepository,MediaRepository $mediaRepository): Response
     {
         $album = $albumRepository->findOneBy(["id" => $id]);
+        if(!$album){
+            return $this->redirectToRoute('admin_album_index');
+        }
+        $medias = $mediaRepository->findBy(["album" => $id]);
+        foreach ($medias as $media){
+            unlink($media->getPath());
+            $entityManager->remove($media);
+        }
         $entityManager->remove($album);
         $entityManager->flush();
         return $this->redirectToRoute('admin_album_index');
