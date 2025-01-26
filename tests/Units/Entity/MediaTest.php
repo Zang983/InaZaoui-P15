@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class MediaTest extends TestCase
 {
-    public function testAlbumEntity()
+    public function testMediaEntity()
     {
         $media = new Media();
         $media->setPath('path');

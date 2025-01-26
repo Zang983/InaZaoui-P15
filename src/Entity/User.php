@@ -17,10 +17,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column]
-    private bool $admin = false;
-
     #[ORM\Column]
     private ?string $name;
 
@@ -91,16 +87,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->medias = $medias;
     }
 
-    public function isAdmin(): bool
-    {
-        return $this->admin;
-    }
-
-    public function setAdmin(bool $admin): void
-    {
-        $this->admin = $admin;
-    }
-
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -110,7 +96,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        if(!in_array('ROLE_BLOCKED', $roles)) {
+        if (!in_array('ROLE_BLOCKED', $roles)) {
             $roles[] = 'ROLE_USER';
         }
         return array_unique($roles);

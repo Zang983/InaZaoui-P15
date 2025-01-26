@@ -39,6 +39,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
+    public function findAdmin(): ?User
+    {
+        $users = $this->createQueryBuilder('u')
+            ->getQuery()
+            ->getResult();
+
+        $filteredUsers = array_filter($users, function ($user) {
+            return in_array("ROLE_ADMIN", $user->getRoles());
+        });
+
+        return $filteredUsers ? reset($filteredUsers) : null;
+    }
+
+
     public function findAllGuestsWithMedia(): array
     {
         return $this->createQueryBuilder('u')
@@ -46,8 +61,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->leftJoin('u.medias', 'm')
             ->addSelect('m')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
     public function findOneGuestWithMedia(int $id): ?User
     {
@@ -58,8 +72,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->leftJoin('u.medias', 'm')
             ->addSelect('m')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
 //    /**
