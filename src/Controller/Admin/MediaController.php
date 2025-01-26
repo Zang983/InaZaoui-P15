@@ -26,7 +26,7 @@ class MediaController extends AbstractController
             $criteria,
             ['id' => 'ASC',],
             25,
-            25 * ($page )
+            25 * ($page - 1)
         );
         $total = $mediaRepository->count($criteria);
 
