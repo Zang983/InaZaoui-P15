@@ -21,6 +21,7 @@ class MediaController extends AbstractController
         if (!$this->isGranted('ROLE_ADMIN')) {
             $criteria['user'] = $this->getUser();
         }
+
         $medias = $mediaRepository->findBy(
             $criteria,
             ['id' => 'ASC',],
