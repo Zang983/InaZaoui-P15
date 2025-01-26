@@ -45,9 +45,9 @@ class MediaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (!$this->isGranted('ROLE_ADMIN')) {
-                $media->setUser($this->getUser());
-            }
+
+            $media->setUser($this->getUser());
+
             $media->setPath('uploads/' . md5(uniqid()) . '.' . $media->getFile()->guessExtension());
             $media->getFile()->move('uploads/', $media->getPath());
             try {
@@ -59,7 +59,6 @@ class MediaController extends AbstractController
             }
             return $this->redirectToRoute('admin_media_index');
         }
-
         return $this->render('admin/media/add.html.twig', ['form' => $form->createView()]);
     }
 
@@ -67,6 +66,12 @@ class MediaController extends AbstractController
     public function delete(int $id, MediaRepository $mediaRepository, EntityManagerInterface $entityManager): Response
     {
         $media = $mediaRepository->findOneBy(["id" => $id]);
+        if(!$media) {
+            throw $this->createNotFoundException('Media introuvable');
+        }
+        if(!$this->isGranted('ROLE_ADMIN') && $media->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
         $entityManager->remove($media);
         $entityManager->flush();
         unlink($media->getPath());
