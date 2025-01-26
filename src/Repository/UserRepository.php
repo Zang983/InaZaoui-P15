@@ -71,8 +71,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findOneGuestWithMedia(int $id): ?User
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.admin = false')
-            ->andWhere('u.id = :id')
+            ->where('u.id = :id')
             ->setParameter('id', $id)
             ->leftJoin('u.medias', 'm')
             ->addSelect('m')
