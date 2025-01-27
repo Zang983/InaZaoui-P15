@@ -28,9 +28,11 @@ class AppFixtures extends Fixture
             'password' => $this->passwordHasher->hashPassword(new User(), 'password')]);
 
         $users = UserFactory::createMany(50, function (): array {
-            static $index = 1;
+            static $index = 0;
+            $index++;
             return [
-                'name' => 'Utilisateur ' . $index++
+                'description' => 'Description de l\'utilisateur ' . $index,
+                'name' => 'Utilisateur ' . $index,
             ];
         });
 

@@ -28,6 +28,16 @@ final class HomeTest extends FunctionalTestCase
         }
     }
 
+    public function testPublicGuestGalleryPage()
+    {
+        $this->get('/guests/2');
+        $crawler = $this->client->getCrawler();
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('h3', 'Utilisateur 1');
+        self::assertSelectorCount(10, '.media');
+        self::assertSelectorTextContains('p.mb-5.w-100', 'Description de l\'utilisateur 1');
+    }
+
     public function testPortfolio()
     {
         $this->get('/portfolio');
