@@ -34,6 +34,7 @@ class AppFixtures extends Fixture
                 'description' => 'Description de l\'utilisateur ' . $index,
                 'name' => 'Utilisateur ' . $index,
                 'email' => 'user' . $index . '@example.com',
+                'password' => $this->passwordHasher->hashPassword(new User(), 'password')
             ];
         });
 
