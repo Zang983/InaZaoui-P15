@@ -21,7 +21,11 @@ final class HomeTest extends FunctionalTestCase
     {
         $this->get('/guests');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorCount(49,'.guest');
+        $this->assertSelectorCount(50, '.guest');
+
+        for ($i = 1; $i <= 50; $i++) {
+            $this->assertSelectorTextContains('.guest:nth-child(' . $i . ')', 'Utilisateur ' . $i . ' (10)');
+        }
 
     }
 }

@@ -26,9 +26,13 @@ class AppFixtures extends Fixture
             'name' => "Ina Zaoui",
             'email' => "ina@zaoui.com",
             'password' => $this->passwordHasher->hashPassword(new User(), 'password')]);
-        $users = UserFactory::createMany(49);
 
-        $users = array_merge([$admin], $users);
+        $users = UserFactory::createMany(50, function (): array {
+            static $index = 1;
+            return [
+                'name' => 'Utilisateur ' . $index++
+            ];
+        });
 
         $albums = AlbumFactory::createMany(5, fn(): array => [
             'name' => "Album " . random_int(1, 5),
@@ -53,23 +57,24 @@ class AppFixtures extends Fixture
 
         /* Création des autres médias*/
         MediaFactory::createMany(500, function () use ($users, $albums): array {
-            static $pathIndex = 0;
-
-            $user = $users[array_rand($users)];
+            static $mediaIndex = 0;
+            $userIndex = $mediaIndex % count($users); // Répartit les médias équitablement entre les utilisateurs
+            $user = $users[$userIndex];
             $baseFilePath = "uploads/";
             $paths = [];
             for ($i = 0; $i < 50; $i++) {
                 $paths[] = $baseFilePath . $i . ".jpg";
             }
-            $path = $paths[$pathIndex % count($paths)];
-            $pathIndex++;
+            $path = $paths[$mediaIndex % count($paths)];
+            $mediaIndex++;
 
             return [
                 'user' => $user,
                 'path' => $path,
-                'title' => "Titre " . $pathIndex,
+                'title' => "Titre " . $mediaIndex,
             ];
         });
+
 
         $manager->flush();
     }
