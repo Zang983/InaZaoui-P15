@@ -8,7 +8,6 @@ namespace App\Tests\Functional;
 use App\Tests\Functional\FunctionalTestCase;
 
 
-
 final class HomeTest extends FunctionalTestCase
 {
     public function testHomePage()
@@ -17,9 +16,12 @@ final class HomeTest extends FunctionalTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('main a', 'découvrir');
     }
-    public function testPublicGuestsPage(){
+
+    public function testPublicGuestsPage()
+    {
         $this->get('/guests');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Nos invités');
+        $this->assertSelectorCount(49,'.guest');
+
     }
 }
