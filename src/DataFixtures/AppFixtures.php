@@ -34,9 +34,12 @@ class AppFixtures extends Fixture
             ];
         });
 
-        $albums = AlbumFactory::createMany(5, fn(): array => [
-            'name' => "Album " . random_int(1, 5),
-        ]);
+        $albums = AlbumFactory::createMany(5, function (): array {
+            static $index = 1;
+            return [
+                'name' => "Album " . $index++
+            ];
+        });
 
         /* Création des médias de l'admin */
         $adminMedias = MediaFactory::createMany(50, function () use ($admin, $albums): array {
@@ -74,7 +77,6 @@ class AppFixtures extends Fixture
                 'title' => "Titre " . $mediaIndex,
             ];
         });
-
 
         $manager->flush();
     }
