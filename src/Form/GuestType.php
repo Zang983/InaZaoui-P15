@@ -34,7 +34,6 @@ class GuestType extends AbstractType
                     'placeholder' => 'Email',
                 ],
             ])
-            ->add('admin')
             ->add('Valider', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-primary',

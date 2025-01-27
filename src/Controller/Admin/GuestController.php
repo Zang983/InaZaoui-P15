@@ -86,10 +86,8 @@ final class GuestController extends AbstractController
             $user->setName($form->get('name')->getData());
             $user->setDescription($form->get('description')->getData());
             $user->setEmail($form->get('email')->getData());
-            $user->setAdmin($form->get('admin')->getData());
             $user->setRoles(['ROLE_USER']);
             $user->setPassword(password_hash('password', PASSWORD_DEFAULT));
-            $user->setIsBlocked(false);
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->redirectToRoute('app_admin_guest');
