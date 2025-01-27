@@ -33,6 +33,7 @@ class AppFixtures extends Fixture
             return [
                 'description' => 'Description de l\'utilisateur ' . $index,
                 'name' => 'Utilisateur ' . $index,
+                'email' => 'user' . $index . '@example.com',
             ];
         });
 

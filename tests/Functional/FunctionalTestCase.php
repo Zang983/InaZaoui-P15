@@ -47,7 +47,13 @@ abstract class FunctionalTestCase extends WebTestCase
     }
 
 
-    protected function login(string $email = 'user+0@email.com'): void
+    protected function loginAdmin(string $email = 'ina@zaoui.com'): void
+    {
+        $user = $this->getEntityManager()->getRepository(User::class)->findOneBy(['email' => $email]);
+        self::assertNotNull($user);
+        $this->client->loginUser($user);
+    }
+    protected function loginGuest(string $email = 'user1@example.com'): void
     {
         $user = $this->getEntityManager()->getRepository(User::class)->findOneBy(['email' => $email]);
         self::assertNotNull($user);

@@ -4,10 +4,6 @@
 
 namespace App\Tests\Functional;
 
-
-use App\Tests\Functional\FunctionalTestCase;
-
-
 final class HomeTest extends FunctionalTestCase
 {
     public function testHomePage()
@@ -62,4 +58,14 @@ final class HomeTest extends FunctionalTestCase
             self::assertCount(10, $mediaNode->filter('img'));
         }
     }
+
+    public function testAboutPage()
+    {
+        $this->get('/about');
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('h2', 'Qui suis-je ?');
+        $description = 'Ina Zaoui est une photographe globe-trotteuse, réputée pour son engagement à explorer les paysages du monde entier en utilisant exclusivement des moyens non motorisés tels que la marche, le vélo ou la voile';
+        self::assertSelectorTextContains('.about-description', $description);
+    }
+
 }
