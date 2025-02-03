@@ -34,11 +34,17 @@ final class MediaTest extends FunctionalTestCase
         self::assertSelectorTextContains('main h1', 'Medias');
         self::assertSelectorCount(25, 'table tbody tr');
         $lines = $crawler->filter('tr');
-        /* Vérification du contenu de la première ligne */
+        /*
+         * We check the content of the first line
+         * Vérification du contenu de la première ligne
+        */
         self::assertStringContainsString('Titre 1', $lines->eq(1)->text());
         self::assertStringContainsString('Utilisateur 1', $lines->eq(1)->text());
 
-        /*Vérification du contenu de la dernière ligne*/
+        /*
+         * Vérification du contenu de la dernière ligne
+         * We check the content of the last line
+        */
         self::assertStringContainsString('Titre 25', $lines->eq(25)->text());
         self::assertStringContainsString('Utilisateur 25', $lines->eq(25)->text());
 

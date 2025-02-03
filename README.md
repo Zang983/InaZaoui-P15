@@ -48,3 +48,56 @@ vérifier la qualité du code à chaque push sur la branche main.
 - Le compte administrateur est créé lors du chargement des fixtures et les identifiants sont les suivants :
   - identifiant : `ina@zaoui.com`
   - mot de passe : `password`
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+# Ina Zaoui - Project 15 - Openclassrooms
+
+## Description
+
+Last project of the PHP/Symfony Application Developer track on Openclassrooms.
+
+## Dependencies
+
+- PHP 8.0 or higher
+- Composer
+- Symfony CLI
+- MySQL or another database management system compatible with Doctrine
+
+## Installation
+
+1. Clone the project on your machine
+2. Install dependencies with Composer: ```composer install```
+3. Add the database URL to your environment variables (DATABASE_URL)
+
+## Database Initialization
+
+1. Create the database:
+   ```php bin/console doctrine:database:create```
+2. Generate the migration:
+   ```php bin/console make:migration```
+3. Perform the migration:
+   ```php bin/console doctrine:migrations:migrate```
+4. Load the fixtures:
+   ```php bin/console doctrine:fixtures:load```
+
+## Usage
+
+You can start a local server with the command ```symfony serve```.
+
+## Tests
+
+The project is tested with PHPUnit and phpStan. Here are the available commands:
+
+- ```composer unit``` : Runs unit tests
+- ```composer coverage``` : Runs unit tests and generates a code coverage report
+- ```composer stan``` : Runs phpStan to check code quality
+
+## Additional Information
+
+- A GitHub workflow for continuous integration is also present. It runs unit tests and checks code quality on every push to the main branch.
+
+- The admin account is created during the fixtures loading, and the credentials are as follows:
+    - username: `ina@zaoui.com`
+    - password: `password`

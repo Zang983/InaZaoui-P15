@@ -73,7 +73,10 @@ final class AlbumTest extends FunctionalTestCase
     {
         $this->loginAdmin();
 
-        /* Création nouvel album */
+        /*
+        New album creation
+        Création nouvel album
+        */
         $this->get('/admin/album/add');
         self::assertResponseIsSuccessful();
 
@@ -86,7 +89,10 @@ final class AlbumTest extends FunctionalTestCase
         $bodyTableNode = $crawler->filter('table tbody');
         $albumsName = $bodyTableNode->filter('tr td:nth-child(1)');
         self::assertCount(6, $albumsName);
-        /* Fin création album*/
+        /*
+        End album creation
+        Fin création album
+        */
 
         $lastAlbum = $this->getEntityManager()->getRepository(Album::class)->findOneBy(['name' => 'Album 6']);
         if($lastAlbum === null){

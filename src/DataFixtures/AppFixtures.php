@@ -45,7 +45,10 @@ class AppFixtures extends Fixture
             ];
         });
 
-        /* Création des médias de l'admin */
+        /*
+        Creation of admin's media
+        Création des médias de l'admin
+        */
         $adminMedias = MediaFactory::createMany(50, function () use ($admin, $albums): array {
             static $pathIndex = 1600;
             $title = "Titre " . $pathIndex . ".jpg";
@@ -62,7 +65,9 @@ class AppFixtures extends Fixture
             ];
         });
 
-        /* Création des autres médias*/
+        /*
+        Creation of other users' media
+        Création des autres médias*/
         MediaFactory::createMany(500, function () use ($users): array {
             static $mediaIndex = 0;
             $userIndex = $mediaIndex % count($users); // Répartit les médias équitablement entre les utilisateurs

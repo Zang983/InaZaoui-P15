@@ -42,15 +42,24 @@ final class HomeTest extends FunctionalTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextSame('h3', 'Portfolio');
 
-        /* Vérification du nombre d'album */
+        /*
+         * Vérification du nombre d'album
+         * Check the number of album
+        */
         $albumListNode = $crawler->filter('main .mb-5.row');
         self::assertCount(6, $albumListNode->filter('a'));
 
-        /* Vérification du nombre total de média */
+        /*
+        Vérification du nombre total de média
+        * Check the number of media
+        */
         $mediaNode = $crawler->filter('.media');
         self::assertCount(50, $mediaNode->filter('img'));
 
-        /* Vérification du nombre de média dans chaque album */
+        /*
+        * Vérification du nombre de média dans chaque album
+        * Check the number of media in each album
+        */
         for ($i = 1; $i < 5; $i++) {
             $this->get('/portfolio/' . $i);
             $crawler = $this->client->getCrawler();

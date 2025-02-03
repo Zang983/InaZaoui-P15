@@ -42,7 +42,9 @@ final class GuestTest extends FunctionalTestCase
     public function testAdminShouldDeleteGuest(): void
     {
         $this->loginAdmin();
-        /* Création d'un utilisateur sans média */
+        /*
+        Creation of an user without media
+        Création d'un utilisateur sans média */
         $this->get('/admin/guests/add');
         self::assertResponseIsSuccessful();
         $this->client->submitForm('Valider', [
@@ -54,7 +56,10 @@ final class GuestTest extends FunctionalTestCase
         $this->client->followRedirect();
         self::assertSelectorCount(51, 'table tbody tr');
 
-        /* Fin création */
+        /*
+        End creation
+        Fin création
+        */
         $lastUser  = $this->getEntityManager()->getRepository(User::class)->findOneBy([], ['id' => 'DESC']);
         $lastId = $lastUser ? $lastUser->getId() : 0;
         $this->get('/admin/guests/delete/' . $lastId);
@@ -75,11 +80,17 @@ final class GuestTest extends FunctionalTestCase
     {
         $this->loginAdmin();
         $this->get('/admin/guests/block/2');
-        /*Bloquage de l'utilisateur*/
+        /*
+         * Bloquage de l'utilisateur
+         * Block user
+         * */
         self::assertResponseRedirects('/admin/guests');
         $this->client->followRedirect();
         self::assertSelectorTextContains('table tbody tr:nth-child(1) td:nth-child(4)', 'Débloquer');
-        /*Débloquage de l'utilisateur*/
+        /*
+        Débloquage de l'utilisateur
+        Unblock user
+        */
         $this->get('/admin/guests/block/2');
         self::assertResponseRedirects('/admin/guests');
         $this->client->followRedirect();
