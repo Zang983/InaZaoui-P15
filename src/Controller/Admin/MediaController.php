@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Media;
+use App\Entity\User;
 use App\Form\MediaType;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,13 +44,17 @@ class MediaController extends AbstractController
         $media = new Media();
         $form = $this->createForm(MediaType::class, $media, ['is_admin' => $this->isGranted('ROLE_ADMIN')]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $media->setUser($this->getUser());
-
-            $media->setPath('uploads/' . md5(uniqid()) . '.' . $media->getFile()->guessExtension());
-            $media->getFile()->move('uploads/', $media->getPath());
+            /** @var User $user */
+            $user = $this->getUser();
+            $media->setUser($user);
+            $file = $media->getFile();
+            if (!$file) {
+                throw $this->createNotFoundException('Fichier introuvable');
+            } else {
+                $media->setPath('uploads/' . md5(uniqid()) . '.' . $file->guessExtension());
+                $file->move('uploads/', $media->getPath());
+            }
             try {
                 $entityManager->persist($media);
                 $entityManager->flush();
@@ -66,10 +71,10 @@ class MediaController extends AbstractController
     public function delete(int $id, MediaRepository $mediaRepository, EntityManagerInterface $entityManager): Response
     {
         $media = $mediaRepository->findOneBy(["id" => $id]);
-        if(!$media) {
+        if (!$media) {
             throw $this->createNotFoundException('Media introuvable');
         }
-        if(!$this->isGranted('ROLE_ADMIN') && $media->getUser() !== $this->getUser()) {
+        if (!$this->isGranted('ROLE_ADMIN') && $media->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }
         $entityManager->remove($media);

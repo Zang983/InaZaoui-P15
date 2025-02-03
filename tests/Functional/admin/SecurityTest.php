@@ -7,7 +7,7 @@ use App\Tests\Functional\FunctionalTestCase;
 final class SecurityTest extends FunctionalTestCase
 {
 
-    public function testAdminLoginWithForm()
+    public function testAdminLoginWithForm(): void
     {
         $this->get('/login');
         self::assertResponseIsSuccessful();
@@ -20,14 +20,15 @@ final class SecurityTest extends FunctionalTestCase
         self::assertResponseIsSuccessful();
     }
 
-    public function testLogout(){
+    public function testLogout(): void
+    {
         $this->loginAdmin();
         $this->get('/logout');
         self::assertResponseRedirects('/');
         $this->get('/admin/album');
         self::assertResponseRedirects('/login');
     }
-    public function testGuestLoginWithForm()
+    public function testGuestLoginWithForm(): void
     {
         $this->get('/login');
         self::assertResponseIsSuccessful();

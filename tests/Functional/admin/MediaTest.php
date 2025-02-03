@@ -7,7 +7,7 @@ use App\Tests\Functional\FunctionalTestCase;
 
 final class MediaTest extends FunctionalTestCase
 {
-    public function testGuestShouldShow()
+    public function testGuestShouldShow(): void
     {
         $this->loginGuest();
         $this->get('/admin/media');
@@ -16,7 +16,7 @@ final class MediaTest extends FunctionalTestCase
         self::assertSelectorCount(10, 'table tbody tr');
     }
 
-    public function testAdminShouldShow()
+    public function testAdminShouldShow(): void
     {
         $this->loginAdmin();
         $this->get('/admin/media');
@@ -25,7 +25,7 @@ final class MediaTest extends FunctionalTestCase
         self::assertSelectorCount(25, 'table tbody tr');
     }
 
-    public function testAdminShouldShowOnPage3()
+    public function testAdminShouldShowOnPage3(): void
     {
         $this->loginAdmin();
         $this->get('/admin/media?page=3');

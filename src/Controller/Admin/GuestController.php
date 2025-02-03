@@ -83,9 +83,12 @@ final class GuestController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = new User();
-            $user->setName($form->get('name')->getData());
-            $user->setDescription($form->get('description')->getData());
-            $user->setEmail($form->get('email')->getData());
+            $username = is_string($form->get('name')->getData()) ? $form->get('name')->getData() : '';
+            $user->setName($username);
+            $description = is_string($form->get('description')->getData()) ? $form->get('description')->getData() : '';
+            $user->setDescription($description);
+            $email = is_string($form->get('email')->getData()) ? $form->get('email')->getData() : '';
+            $user->setEmail($email);
             $user->setRoles(['ROLE_USER']);
             $user->setPassword(password_hash('password', PASSWORD_DEFAULT));
             $entityManager->persist($user);

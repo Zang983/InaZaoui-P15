@@ -7,14 +7,14 @@ use App\Tests\Functional\FunctionalTestCase;
 
 final class GuestTest extends FunctionalTestCase
 {
-    public function testGuestIsForbidden()
+    public function testGuestIsForbidden(): void
     {
         $this->loginGuest();
         $this->get('/admin/guests');
         self::assertResponseStatusCodeSame(403);
     }
 
-    public function testAdminShouldGetGuests()
+    public function testAdminShouldGetGuests(): void
     {
         $this->loginAdmin();
         $this->get('/admin/guests');
@@ -23,7 +23,7 @@ final class GuestTest extends FunctionalTestCase
         self::assertSelectorCount(50, 'table tbody tr');
     }
 
-    public function testAdminShouldCreateGuest()
+    public function testAdminShouldCreateGuest(): void
     {
         $this->loginAdmin();
         $this->get('/admin/guests/add');
@@ -39,7 +39,7 @@ final class GuestTest extends FunctionalTestCase
 
     }
 
-    public function testAdminShouldDeleteGuest()
+    public function testAdminShouldDeleteGuest(): void
     {
         $this->loginAdmin();
         /* Création d'un utilisateur sans média */
@@ -55,13 +55,15 @@ final class GuestTest extends FunctionalTestCase
         self::assertSelectorCount(51, 'table tbody tr');
 
         /* Fin création */
-        $lastId = $this->getEntityManager()->getRepository(User::class)->findOneBy([], ['id' => 'DESC'])->getId();
+        $lastUser  = $this->getEntityManager()->getRepository(User::class)->findOneBy([], ['id' => 'DESC']);
+        $lastId = $lastUser ? $lastUser->getId() : 0;
         $this->get('/admin/guests/delete/' . $lastId);
         self::assertResponseRedirects('/admin/guests');
         $this->client->followRedirect();
         self::assertSelectorCount(50, 'table tbody tr');
     }
-    public function testAdminShouldNotDeleteNonExistentGuest(){
+    public function testAdminShouldNotDeleteNonExistentGuest(): void
+    {
         $this->loginAdmin();
         $this->get('/admin/guests/delete/-1');
         self::assertResponseRedirects('/admin/guests');
@@ -69,7 +71,7 @@ final class GuestTest extends FunctionalTestCase
         self::assertSelectorCount(50, 'table tbody tr');
     }
 
-    public function testAdminShouldBlockGuest()
+    public function testAdminShouldBlockGuest(): void
     {
         $this->loginAdmin();
         $this->get('/admin/guests/block/2');
@@ -83,7 +85,8 @@ final class GuestTest extends FunctionalTestCase
         $this->client->followRedirect();
         self::assertSelectorTextContains('table tbody tr:nth-child(1) td:nth-child(4)', 'Bloquer');
     }
-    public function testAdminDoesNotBlockNonExistentGuest(){
+    public function testAdminDoesNotBlockNonExistentGuest(): void
+    {
         $this->loginAdmin();
         $this->get('/admin/guests/block/-1');
         self::assertResponseRedirects('/admin/guests');

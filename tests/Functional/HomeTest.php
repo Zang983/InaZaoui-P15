@@ -6,14 +6,14 @@ namespace App\Tests\Functional;
 
 final class HomeTest extends FunctionalTestCase
 {
-    public function testHomePage()
+    public function testHomePage(): void
     {
         $this->get('/');
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('main a', 'découvrir');
     }
 
-    public function testPublicGuestsPage()
+    public function testPublicGuestsPage(): void
     {
         $this->get('/guests');
         self::assertResponseIsSuccessful();
@@ -24,7 +24,7 @@ final class HomeTest extends FunctionalTestCase
         }
     }
 
-    public function testPublicGuestGalleryPage()
+    public function testPublicGuestGalleryPage(): void
     {
         $this->get('/guests/2');
         $crawler = $this->client->getCrawler();
@@ -34,7 +34,7 @@ final class HomeTest extends FunctionalTestCase
         self::assertSelectorTextContains('p.mb-5.w-100', 'Description de l\'utilisateur 1');
     }
 
-    public function testPortfolio()
+    public function testPortfolio(): void
     {
         $this->get('/portfolio');
         $crawler = $this->client->getCrawler();
@@ -59,7 +59,7 @@ final class HomeTest extends FunctionalTestCase
         }
     }
 
-    public function testAboutPage()
+    public function testAboutPage(): void
     {
         $this->get('/about');
         self::assertResponseIsSuccessful();

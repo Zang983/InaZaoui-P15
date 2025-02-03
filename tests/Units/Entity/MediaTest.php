@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MediaTest extends TestCase
 {
-    public function testMediaEntity()
+    public function testMediaEntity(): void
     {
         $media = new Media();
         $this->assertNull($media->getId());
@@ -35,7 +35,7 @@ class MediaTest extends TestCase
         $this->assertEquals($album, $media->getAlbum());
     }
 
-    public function testUploadedFile()
+    public function testUploadedFile(): void
     {
         $media = new Media();
         $filePath = 'test.txt';

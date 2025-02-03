@@ -7,7 +7,7 @@ use App\Tests\Functional\FunctionalTestCase;
 
 final class AlbumTest extends FunctionalTestCase
 {
-    public function testGuestIsForbidden()
+    public function testGuestIsForbidden(): void
     {
         $this->loginGuest();
         $this->get('/admin/album');
@@ -20,7 +20,7 @@ final class AlbumTest extends FunctionalTestCase
         self::assertResponseStatusCodeSame(403);
     }
 
-    public function testAdminIndex()
+    public function testAdminIndex(): void
     {
         $this->loginAdmin();
         $this->get('/admin/album');
@@ -34,7 +34,7 @@ final class AlbumTest extends FunctionalTestCase
         self::assertEquals('Album 1', $albumsName->eq(0)->text());
     }
 
-    public function testAdminAdd()
+    public function testAdminAdd(): void
     {
         $this->loginAdmin();
         $this->get('/admin/album/add');
@@ -52,7 +52,7 @@ final class AlbumTest extends FunctionalTestCase
         self::assertEquals('Album 6', $albumsName->eq(5)->text());
     }
 
-    public function testAdminUpdate()
+    public function testAdminUpdate(): void
     {
         $this->loginAdmin();
         $this->get('/admin/album/update/1');
@@ -69,7 +69,7 @@ final class AlbumTest extends FunctionalTestCase
         self::assertCount(5, $albumsName);
     }
 
-    public function testAdminDelete()
+    public function testAdminDelete(): void
     {
         $this->loginAdmin();
 
@@ -89,7 +89,10 @@ final class AlbumTest extends FunctionalTestCase
         /* Fin création album*/
 
         $lastAlbum = $this->getEntityManager()->getRepository(Album::class)->findOneBy(['name' => 'Album 6']);
-        $this->get('/admin/album/delete/'.$lastAlbum->getId());
+        if($lastAlbum === null){
+            self::fail('Album 6 not found');
+        }
+        $this->get('/admin/album/delete/' . $lastAlbum->getId());
         self::assertResponseRedirects('/admin/album');
         $this->client->followRedirect();
         $crawler = $this->client->getCrawler();
@@ -97,7 +100,7 @@ final class AlbumTest extends FunctionalTestCase
         self::assertCount(5, $bodyTableNode->filter('tr'));
     }
 
-    public function testDeleteAlbumWichDoesNotExist()
+    public function testDeleteAlbumWichDoesNotExist(): void
     {
         $this->loginAdmin();
         $this->get('/admin/album/delete/-1');

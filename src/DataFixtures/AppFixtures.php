@@ -63,7 +63,7 @@ class AppFixtures extends Fixture
         });
 
         /* Création des autres médias*/
-        MediaFactory::createMany(500, function () use ($users, $albums): array {
+        MediaFactory::createMany(500, function () use ($users): array {
             static $mediaIndex = 0;
             $userIndex = $mediaIndex % count($users); // Répartit les médias équitablement entre les utilisateurs
             $user = $users[$userIndex];

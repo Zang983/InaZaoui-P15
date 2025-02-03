@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function testUserEntity()
+    public function testUserEntity(): void
     {
         $user = new User();
 
