@@ -34,12 +34,6 @@ jobs:
         run: |
           composer install --no-progress --no-suggest --prefer-dist --no-cache
 
-      - name: Compile Sass
-        run: php bin/console sass:build
-
-      - name: Run PHPStan
-        run: vendor/bin/phpstan analyse
-
       - name: Prepare Database
         run: |
           php bin/console doctrine:database:drop --if-exists --env=test --force
@@ -58,3 +52,6 @@ jobs:
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit --configuration phpunit.xml.dist
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse
