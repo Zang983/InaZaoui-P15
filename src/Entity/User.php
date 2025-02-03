@@ -17,31 +17,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column]
-    private bool $admin = false;
-
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $name;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description;
 
     #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
+    private string $email = '';
 
+    /**
+     * @var Collection<int, Media>
+     */
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'user')]
     private Collection $medias;
 
+    /**
+     * @var list<string> The user roles
+     */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     #[ORM\Column(type: 'string')]
     private string $password;
-
-    #[ORM\Column]
-    private ?bool $is_blocked = null;
-
 
     public function __construct()
     {
@@ -85,26 +83,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->description = $description;
     }
 
+    /**
+     * @return Collection<int, Media>
+     */
     public function getMedias(): Collection
     {
         return $this->medias;
     }
 
+    /**
+     * @param Collection<int, Media> $medias
+     */
     public function setMedias(Collection $medias): void
     {
         $this->medias = $medias;
     }
 
-    public function isAdmin(): bool
-    {
-        return $this->admin;
-    }
-
-    public function setAdmin(bool $admin): void
-    {
-        $this->admin = $admin;
-    }
-
+    /**
+     * @param list<string> $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -114,7 +111,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
+        if (!in_array('ROLE_BLOCKED', $roles)) {
+            $roles[] = 'ROLE_USER';
+        }
         return array_unique($roles);
     }
 
@@ -132,7 +131,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        if($this->email === ''){
+            throw new \LogicException('The email of the user is empty. This should never happen.');
+        }
+        return $this->email;
     }
 
     /**
@@ -142,17 +144,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function isBlocked(): ?bool
-    {
-        return $this->is_blocked;
-    }
-
-    public function setIsBlocked(bool $is_blocked): static
-    {
-        $this->is_blocked = $is_blocked;
-
-        return $this;
     }
 }

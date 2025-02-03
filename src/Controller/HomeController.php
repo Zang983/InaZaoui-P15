@@ -23,7 +23,7 @@ class HomeController extends AbstractController
     #[Route ("/guests", name: "public_guests")]
     public function guests(UserRepository $userRepository)
     {
-        $guests = $userRepository->findBy(["admin" => false]);
+        $guests = $userRepository->findAll();
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);
@@ -43,7 +43,7 @@ class HomeController extends AbstractController
     {
         $albums = $albumRepository->findAll();
         $album = $id ? $albumRepository->find($id) : null;
-        $user = $userRepository->findBy(["admin" => true]);
+        $user = $userRepository->findAdmin();
 
         $medias = $album
             ? $mediaRepository->findBy(["album" => $album])

@@ -13,11 +13,6 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  * @extends ServiceEntityRepository<User>
  *
  * @implements PasswordUpgraderInterface<User>
- *
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
@@ -38,6 +33,60 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    public function findAdmin(): ?User
+    {
+        $users = $this->createQueryBuilder('u')
+            ->getQuery()
+            ->getResult();
+
+        if(!is_array($users)) {
+            return null;
+        }
+        /** @var User[] $users */
+        $filteredUsers = array_filter($users, function ($user) {
+            return in_array("ROLE_ADMIN", $user->getRoles());
+        });
+
+        return $filteredUsers ? reset($filteredUsers) : null;
+    }
+
+
+    /**
+     * @return User[]
+     */
+    public function findAllGuestsWithMedia(): array
+    {
+        $users = $this->createQueryBuilder('u')
+            ->leftJoin('u.medias', 'm')
+            ->addSelect('m')
+            ->getQuery()
+            ->getResult();
+
+
+        if (!is_array($users)) {
+            return [];
+        }
+        /** @var User[] $users */
+        $filteredUsers = array_filter($users, function ($user) {
+            return !in_array("ROLE_ADMIN", $user->getRoles());
+        });
+
+        return $filteredUsers ? $filteredUsers : [];
+    }
+
+    public function findOneGuestWithMedia(int $id): ?User
+    {
+        $user = $this->createQueryBuilder('u')
+            ->where('u.id = :id')
+            ->setParameter('id', $id)
+            ->leftJoin('u.medias', 'm')
+            ->addSelect('m')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $user instanceof User ? $user : null;
     }
 
 //    /**
