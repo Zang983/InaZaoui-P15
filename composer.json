@@ -88,6 +88,9 @@
         ],
         "coverage": [
             "vendor/bin/phpunit --coverage-html public/test-coverage"
+        ],
+        "stan": [
+            "vendor/bin/phpstan analyse"
         ]
     },
     "conflict": {
