@@ -31,9 +31,8 @@ class HomeController extends AbstractController
     }
 
     #[Route ("/guests/{id}", name: "guest")]
-    public function guest(int $id, UserRepository $userRepository): Response
+    public function guest(User $guest, UserRepository $userRepository): Response
     {
-        $guest = $userRepository->findOneGuestWithMedia($id);
         return $this->render('front/guest.html.twig', [
             'guest' => $guest,
         ]);

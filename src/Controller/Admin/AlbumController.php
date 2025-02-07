@@ -40,14 +40,13 @@ class AlbumController extends AbstractController
     }
 
     #[Route ("/admin/album/update/{id}", name: "admin_album_update", methods: ["GET", "POST"])]
-    public function update(Request $request, int $id, AlbumRepository $albumRepository, EntityManagerInterface $entityManager): Response
+    public function update(Album $album = null, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $album = $albumRepository->findOneBy(["id" => $id]);
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($album === null){
+            if ($album === null) {
                 return $this->redirectToRoute('admin_album_index');
             }
             $entityManager->persist($album);
@@ -58,14 +57,13 @@ class AlbumController extends AbstractController
     }
 
     #[Route ("/admin/album/delete/{id}", name: "admin_album_delete", methods: ["GET"])]
-    public function delete(int $id, EntityManagerInterface $entityManager, AlbumRepository $albumRepository,MediaRepository $mediaRepository): Response
+    public function delete(Album $album = null, int $id, EntityManagerInterface $entityManager, MediaRepository $mediaRepository): Response
     {
-        $album = $albumRepository->findOneBy(["id" => $id]);
-        if(!$album){
+        if (!$album) {
             return $this->redirectToRoute('admin_album_index');
         }
         $medias = $mediaRepository->findBy(["album" => $id]);
-        foreach ($medias as $media){
+        foreach ($medias as $media) {
             unlink($media->getPath());
             $entityManager->remove($media);
         }

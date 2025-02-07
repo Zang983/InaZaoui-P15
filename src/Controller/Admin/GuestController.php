@@ -29,13 +29,11 @@ final class GuestController extends AbstractController
 
     #[Route('/admin/guests/delete/{id}', name: 'admin_delete_guest')]
     public function deleteGuest(
-        int                    $id,
-        UserRepository         $userRepository,
+        User                   $user = null,
         EntityManagerInterface $entityManager,
         MediaRepository        $mediaRepository
     ): Response
     {
-        $user = $userRepository->findOneBy(["id" => $id]);
         if (!$user) {
             return $this->redirectToRoute('app_admin_guest');
         }
@@ -53,17 +51,12 @@ final class GuestController extends AbstractController
     }
 
     #[Route('admin/guests/block/{id}', name: 'admin_block_guest')]
-    public function blockGuest(
-        int                    $id,
-        UserRepository         $userRepository,
-        EntityManagerInterface $entityManager
-    ): Response
+    public function blockGuest(User $user = null, EntityManagerInterface $entityManager): Response
     {
-        $user = $userRepository->findOneBy(["id" => $id]);
         if (!$user) {
             return $this->redirectToRoute('app_admin_guest');
         }
-        if(in_array('ROLE_BLOCKED', $user->getRoles())) {
+        if (in_array('ROLE_BLOCKED', $user->getRoles())) {
             $user->setRoles(['ROLE_USER']);
         } else {
             $user->setRoles(['ROLE_BLOCKED']);
