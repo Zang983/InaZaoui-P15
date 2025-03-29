@@ -40,7 +40,7 @@ class AlbumController extends AbstractController
     }
 
     #[Route ("/admin/album/update/{id}", name: "admin_album_update", methods: ["GET", "POST"])]
-    public function update(Album $album = null, Request $request, EntityManagerInterface $entityManager): Response
+    public function update(Request $request, EntityManagerInterface $entityManager, Album $album = null): Response
     {
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
@@ -57,7 +57,7 @@ class AlbumController extends AbstractController
     }
 
     #[Route ("/admin/album/delete/{id}", name: "admin_album_delete", methods: ["GET"])]
-    public function delete(Album $album = null, int $id, EntityManagerInterface $entityManager, MediaRepository $mediaRepository): Response
+    public function delete(int $id, EntityManagerInterface $entityManager, MediaRepository $mediaRepository, Album $album = null): Response
     {
         if (!$album) {
             return $this->redirectToRoute('admin_album_index');

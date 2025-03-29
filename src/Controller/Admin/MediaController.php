@@ -68,7 +68,7 @@ class MediaController extends AbstractController
     }
 
     #[Route ("/admin/media/delete/{id}", name: "admin_media_delete", methods: ["GET"])]
-    public function delete(Media $media = null, EntityManagerInterface $entityManager): Response
+    public function delete(EntityManagerInterface $entityManager, Media $media = null): Response
     {
         if (!$media) {
             throw $this->createNotFoundException('Media introuvable');
