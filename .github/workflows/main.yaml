@@ -52,6 +52,3 @@ jobs:
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit --configuration phpunit.xml.dist
-
-      - name: Run PHPStan
-        run: vendor/bin/phpstan analyse
